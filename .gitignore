@@ -64,3 +64,7 @@ uploads/
 *.key
 *.p12
 *.pfx
+apps/backend/dist
+apps/backend/node_modules
+apps/admin/node_modules
+apps/admin/.next
