@@ -1,0 +1,1953 @@
+SPEC PRODUIT ET TECHNIQUE — APPLICATION VTC TYPE “YANGO/UBER LOCAL” POUR ABIDJAN
+Avec système d’enchère passager ↔ chauffeur + géolocalisation chauffeur en direct
+1. Vision produit
+
+Créer une plateforme de mobilité urbaine pour Abidjan permettant à un passager de demander une course, puis de recevoir soit :
+
+une proposition de prix automatique,
+
+soit plusieurs offres venant des chauffeurs à proximité via un système d’enchère.
+
+Le passager peut voir les chauffeurs disponibles autour de lui sur une carte, consulter leurs offres, leur note, leur distance, leur ETA, puis choisir une offre. Une fois la course acceptée, le passager suit la position du chauffeur en temps réel jusqu’à l’arrivée, puis pendant le trajet.
+
+Le produit doit être pensé dès le départ pour :
+
+le marché africain,
+
+les paiements cash + mobile money,
+
+les connexions réseau instables,
+
+les adresses peu structurées,
+
+les zones très denses,
+
+les trajets courts et fréquents,
+
+l’évolutivité vers livraison, moto-taxi, taxi classique et entreprise.
+
+2. Objectif MVP
+
+Construire un MVP fonctionnel avec :
+
+application passager,
+
+application chauffeur,
+
+panneau d’administration web,
+
+backend temps réel,
+
+matching géolocalisé,
+
+système d’enchère,
+
+suivi temps réel du chauffeur,
+
+paiement cash et mobile money,
+
+notation,
+
+commissions,
+
+notifications push.
+
+Le MVP doit permettre :
+
+à un passager de créer une demande de course,
+
+à des chauffeurs proches de recevoir cette demande,
+
+à des chauffeurs d’envoyer un prix proposé,
+
+au passager de choisir une offre,
+
+au chauffeur sélectionné de venir au point de départ,
+
+au passager de suivre le chauffeur en direct,
+
+d’exécuter la course,
+
+de clôturer la course avec paiement et facture simple.
+
+3. Positionnement produit
+
+L’application n’est pas une copie stricte d’Uber/Yango.
+Le différenciateur principal est :
+
+3.1 Enchère intelligente
+
+Le prix peut être négocié dans une fourchette contrôlée.
+Le passager ne subit pas uniquement un tarif imposé.
+Le chauffeur peut proposer un prix selon trafic, distance, zone, heure et retour à vide.
+
+3.2 Transparence
+
+Le passager voit :
+
+où sont les chauffeurs proches,
+
+combien de temps ils mettront à arriver,
+
+leur note,
+
+leur type de véhicule,
+
+leurs offres.
+
+3.3 Adaptation locale
+
+Le système doit supporter :
+
+cash,
+
+mobile money,
+
+points de repère manuels,
+
+départ/arrivée non standard,
+
+appel du chauffeur,
+
+réseaux mobiles parfois faibles.
+
+4. Types d’utilisateurs
+4.1 Passager
+
+Peut :
+
+créer un compte,
+
+demander une course,
+
+voir les chauffeurs proches,
+
+recevoir plusieurs offres,
+
+choisir une offre,
+
+suivre le chauffeur en direct,
+
+payer,
+
+noter,
+
+consulter historique et reçus.
+
+4.2 Chauffeur
+
+Peut :
+
+créer un compte,
+
+soumettre ses documents,
+
+configurer son véhicule,
+
+passer en ligne/hors ligne,
+
+recevoir demandes proches,
+
+envoyer une enchère,
+
+accepter une course attribuée,
+
+naviguer vers le passager,
+
+démarrer/terminer course,
+
+voir ses revenus,
+
+recevoir sa commission nette.
+
+4.3 Administrateur
+
+Peut :
+
+gérer utilisateurs,
+
+valider chauffeurs,
+
+suspendre comptes,
+
+voir courses en temps réel,
+
+gérer litiges,
+
+configurer commissions,
+
+définir règles d’enchère,
+
+gérer zones,
+
+gérer promotions,
+
+voir statistiques globales.
+
+5. Fonctionnalités détaillées
+5.1 Module passager
+5.1.1 Inscription / connexion
+
+téléphone obligatoire
+
+OTP par SMS
+
+possibilité future email social login
+
+profil avec nom, prénom, photo, langue, numéro secondaire
+
+validation du téléphone obligatoire avant première course
+
+5.1.2 Écran d’accueil
+
+carte centrée sur position actuelle
+
+champ “Où allez-vous ?”
+
+affichage des chauffeurs proches visibles sur la carte
+
+bouton pour recentrer la carte
+
+possibilité d’entrer départ manuellement
+
+favoris : domicile, bureau, lieux récents
+
+5.1.3 Création demande de course
+
+Le passager renseigne :
+
+point de départ
+
+destination
+
+type de véhicule
+
+mode tarifaire :
+
+prix auto
+
+enchère ouverte
+
+mode de paiement :
+
+cash
+
+mobile money
+
+note facultative pour le chauffeur
+
+nombre de places
+
+bagages oui/non
+
+Le système calcule :
+
+distance estimée
+
+durée estimée
+
+fourchette recommandée min/max
+
+prix suggéré IA/règle métier
+
+5.1.4 Système d’enchère côté passager
+
+Deux modes :
+
+Mode A — Prix suggéré par la plateforme
+
+Le système affiche un prix recommandé et le passager confirme.
+
+Mode B — Enchère
+
+Le passager peut :
+
+proposer un prix initial,
+
+accepter de recevoir des contre-offres,
+
+voir plusieurs offres en direct.
+
+Chaque offre doit afficher :
+
+prénom du chauffeur
+
+photo
+
+note
+
+nombre de courses
+
+véhicule
+
+plaque partielle
+
+distance au passager
+
+ETA
+
+prix proposé
+
+moyen de paiement accepté
+
+bouton sélectionner
+
+5.1.5 Visualisation du chauffeur en direct
+
+Après sélection :
+
+carte avec position temps réel du chauffeur
+
+ETA dynamique
+
+statut :
+
+en route vers vous
+
+arrivé
+
+course commencée
+
+course terminée
+
+bouton appeler
+
+bouton chat
+
+bouton annuler selon règles
+
+affichage du trajet prévu
+
+5.1.6 Pendant la course
+
+suivi temps réel du véhicule
+
+temps écoulé
+
+distance restante
+
+bouton urgence / assistance
+
+partage trajet à un proche
+
+affichage prix estimé ou prix convenu
+
+5.1.7 Fin de course
+
+écran de récapitulatif
+
+prix final
+
+méthode de paiement
+
+note chauffeur
+
+commentaire
+
+reçu simple
+
+historique consultable
+
+5.2 Module chauffeur
+5.2.1 Onboarding chauffeur
+
+Étapes :
+
+téléphone + OTP
+
+infos personnelles
+
+photo de profil
+
+pièce d’identité
+
+permis
+
+carte grise
+
+assurance
+
+photo véhicule
+
+type véhicule
+
+plaque
+
+validation admin requise
+
+5.2.2 Statut chauffeur
+
+États :
+
+offline
+
+online disponible
+
+en attente réponse enchère
+
+en route vers client
+
+arrivé
+
+course en cours
+
+suspendu
+
+5.2.3 Réception des demandes
+
+Quand une demande arrive, le chauffeur voit :
+
+distance vers client
+
+point de prise en charge
+
+destination approximative ou exacte selon stratégie produit
+
+distance totale estimée
+
+durée estimée
+
+prix proposé par client si enchère ouverte
+
+temps restant pour répondre
+
+Actions possibles :
+
+ignorer
+
+proposer un prix
+
+accepter prix proposé si modèle autorisé
+
+refuser
+
+5.2.4 Moteur d’enchère côté chauffeur
+
+Le chauffeur peut envoyer :
+
+un prix,
+
+une contre-offre,
+
+une acceptation immédiate si prix client acceptable.
+
+Contraintes métier :
+
+prix min autorisé selon distance/zone
+
+prix max autorisé selon type course
+
+délai de réponse limité, ex. 20 secondes
+
+blocage anti-spam : nombre max d’offres simultanées
+
+5.2.5 Une fois choisi
+
+Le chauffeur reçoit :
+
+confirmation d’attribution,
+
+coordonnées du passager,
+
+itinéraire jusqu’au point de départ,
+
+chat/appel,
+
+bouton “Je suis arrivé”,
+
+bouton “Démarrer course”.
+
+5.2.6 Pendant la course
+
+Le chauffeur doit transmettre sa position régulièrement.
+Actions :
+
+démarrer course
+
+pause exceptionnelle
+
+terminer course
+
+signaler incident
+
+5.2.7 Portefeuille chauffeur
+
+solde brut
+
+commission plateforme
+
+net à recevoir
+
+historique courses
+
+retraits
+
+pénalités éventuelles
+
+bonus éventuels
+
+5.3 Module administration web
+5.3.1 Gestion chauffeurs
+
+liste
+
+filtre par statut
+
+validation/rejet documents
+
+suspension
+
+note moyenne
+
+nombre de courses
+
+commission personnalisée possible
+
+5.3.2 Gestion passagers
+
+liste
+
+historique
+
+suspensions
+
+signalements
+
+fraude
+
+5.3.3 Gestion courses
+
+suivi temps réel
+
+détails complets
+
+statut
+
+litiges
+
+annulations
+
+prix convenu vs final
+
+logs d’enchère
+
+5.3.4 Paramètres business
+
+commission par catégorie
+
+tarification min
+
+tarification max
+
+frais annulation
+
+rayon de dispatch
+
+durée validité enchère
+
+nombre max de chauffeurs notifiés
+
+bonus et promotions
+
+5.3.5 Dashboard analytics
+
+nombre de courses par jour
+
+GMV
+
+revenu plateforme
+
+chauffeurs actifs
+
+passagers actifs
+
+taux conversion demande → course
+
+taux annulation
+
+temps moyen attente
+
+heatmap géographique
+
+6. Règles métier du système d’enchère
+6.1 Principe général
+
+Le passager crée une demande avec :
+
+un prix libre,
+
+ou sans prix.
+
+Le backend envoie la demande aux chauffeurs proches et éligibles.
+
+Les chauffeurs peuvent répondre avec un montant dans une fenêtre de temps courte.
+
+Le passager voit les offres classées automatiquement.
+
+6.2 Classement des offres
+
+Le tri par défaut doit combiner :
+
+prix proposé
+
+ETA chauffeur
+
+note chauffeur
+
+taux d’annulation
+
+taux d’acceptation
+
+distance chauffeur → passager
+
+Formule indicative :
+score = poids_prix + poids_eta + poids_note + poids_fiabilite
+
+Exemple :
+
+prix bas = meilleur score
+
+ETA court = meilleur score
+
+note élevée = meilleur score
+
+annulations élevées = pénalité
+
+6.3 Garde-fous
+
+Pour éviter le chaos :
+
+prix minimum dynamique selon distance et zone
+
+prix maximum dynamique
+
+délai limite réponse chauffeur
+
+nombre maximum d’allers-retours
+
+expiration auto de la demande
+
+gel temporaire du prix après sélection
+
+6.4 Scénarios supportés
+Scénario 1
+
+Passager fixe 3000 FCFA, un chauffeur accepte, course attribuée.
+
+Scénario 2
+
+Passager propose 2500 FCFA, trois chauffeurs répondent 3000 / 3200 / 3500, le passager choisit 3000.
+
+Scénario 3
+
+Aucun chauffeur ne répond, le système propose :
+
+augmenter le prix,
+
+élargir le rayon,
+
+passer en tarif auto.
+
+7. Géolocalisation et visualisation temps réel
+7.1 Exigence produit
+
+Le passager doit voir le chauffeur bouger en direct avant et pendant la course.
+
+7.2 Mise à jour de position
+
+Le chauffeur envoie sa position :
+
+toutes les 2 à 5 secondes en mode actif,
+
+toutes les 10 à 15 secondes en mode online passif,
+
+uniquement si déplacement significatif ou temps écoulé.
+
+7.3 Optimisation batterie
+
+réduction fréquence si app en arrière-plan
+
+reprise immédiate à fréquence haute lors d’une course active
+
+filtrage des positions erronées
+
+lissage trajectoire
+
+7.4 États carte côté passager
+
+chauffeurs disponibles autour
+
+chauffeur sélectionné en approche
+
+chauffeur arrivé
+
+trajet en cours
+
+8. Types de véhicules
+
+Prévoir dès le début une table configurable :
+
+Standard
+
+Confort
+
+XL
+
+Moto
+
+Taxi classique
+
+Livraison légère
+
+Chaque catégorie a :
+
+commission
+
+capacité
+
+prix min
+
+multiplicateur
+
+icône carte
+
+rayon de dispatch par défaut
+
+9. Paiement
+9.1 MVP
+
+Supporter :
+
+cash
+
+mobile money
+
+9.2 Cas d’usage
+Cash
+
+Le prix est marqué payé manuellement par chauffeur ou passager selon workflow contrôlé.
+
+Mobile money
+
+initier paiement
+
+confirmer paiement
+
+enregistrer transaction
+
+gérer échecs et réconciliations
+
+9.3 Règles
+
+paiement avant ou après course selon paramètre
+
+certaines courses peuvent exiger préautorisation future
+
+la plateforme prélève sa commission selon wallet chauffeur ou commission déduite
+
+10. Annulation et litiges
+10.1 Annulation passager
+
+Cas :
+
+avant acceptation
+
+après acceptation
+
+après arrivée chauffeur
+
+Règles possibles :
+
+gratuite avant sélection
+
+frais après délai
+
+frais si chauffeur déjà arrivé
+
+10.2 Annulation chauffeur
+
+Suivre :
+
+nombre d’annulations,
+
+raison,
+
+impact sur score,
+
+suspension si abus.
+
+10.3 Litiges
+
+Créer un module simple :
+
+signalement
+
+catégorie
+
+commentaire
+
+pièces jointes
+
+review admin
+
+décision
+
+remboursement partiel/total éventuel
+
+11. Sécurité
+11.1 Côté utilisateur
+
+OTP obligatoire
+
+masquage numéro réel via proxy téléphonique possible plus tard
+
+bouton SOS
+
+partage de trajet
+
+historique des chauffeurs/passagers
+
+11.2 Côté plateforme
+
+journalisation de tous les événements
+
+détection fraude
+
+limitation brute force OTP
+
+signature JWT
+
+chiffrement secrets
+
+contrôle de version API
+
+protection anti GPS spoofing basique
+
+11.3 Côté chauffeur
+
+validation documentaire
+
+selfie vérification possible plus tard
+
+contrôle appareil / session
+
+déconnexion multi-device configurable
+
+12. Architecture technique recommandée
+12.1 Frontend mobile
+
+Choix recommandé :
+
+Flutter pour passager et chauffeur avec codebase commune
+ou
+
+React Native si équipe JS/TS
+
+Recommandation pour MVP robuste : Flutter
+
+12.2 Frontend web admin
+
+Next.js
+
+TypeScript
+
+Tailwind
+
+dashboard responsive
+
+12.3 Backend
+
+NestJS ou FastAPI
+
+Recommandation :
+
+NestJS + TypeScript pour cohérence full TS si admin en Next.js
+
+architecture modulaire
+
+12.4 Base de données
+
+PostgreSQL + PostGIS pour géolocalisation
+
+12.5 Temps réel
+
+WebSocket via Socket.IO ou native ws
+
+Redis Pub/Sub pour présence et événements
+
+possibilité future Kafka
+
+12.6 Cache / files / queue
+
+Redis pour sessions, présence, rate limiting, queue légère
+
+BullMQ pour jobs async
+
+12.7 Stockage fichiers
+
+S3 compatible
+
+documents chauffeurs
+
+photos profils
+
+preuves litiges
+
+12.8 Cartographie
+
+Google Maps ou Mapbox
+
+fallback selon coût
+
+géocodage inverse
+
+calcul ETA
+
+routage
+
+12.9 Notifications
+
+Firebase Cloud Messaging
+
+SMS provider local pour OTP
+
+email facultatif admin
+
+13. Architecture logique backend
+
+Modules recommandés :
+
+auth
+
+users
+
+passengers
+
+drivers
+
+vehicles
+
+documents
+
+trips
+
+bidding
+
+pricing
+
+geolocation
+
+realtime
+
+payments
+
+wallets
+
+notifications
+
+reviews
+
+disputes
+
+promos
+
+admin
+
+analytics
+
+config
+
+14. Modèle de données principal
+14.1 Users
+
+id
+
+role
+
+phone
+
+email
+
+password_hash nullable
+
+first_name
+
+last_name
+
+photo_url
+
+status
+
+language
+
+created_at
+
+updated_at
+
+14.2 PassengerProfiles
+
+id
+
+user_id
+
+default_payment_method
+
+rating_avg
+
+total_trips
+
+14.3 DriverProfiles
+
+id
+
+user_id
+
+status
+
+verification_status
+
+current_lat
+
+current_lng
+
+heading
+
+speed
+
+last_location_at
+
+rating_avg
+
+total_trips
+
+cancel_rate
+
+accept_rate
+
+wallet_balance
+
+online_since
+
+14.4 DriverDocuments
+
+id
+
+driver_id
+
+type
+
+file_url
+
+status
+
+reviewed_by
+
+reviewed_at
+
+expires_at
+
+14.5 Vehicles
+
+id
+
+driver_id
+
+category_id
+
+brand
+
+model
+
+color
+
+plate_number
+
+year
+
+seat_count
+
+photo_url
+
+status
+
+14.6 VehicleCategories
+
+id
+
+name
+
+slug
+
+min_price
+
+max_price
+
+base_fare
+
+per_km
+
+per_minute
+
+commission_percent
+
+enabled
+
+14.7 Trips
+
+id
+
+passenger_id
+
+driver_id nullable until assigned
+
+status
+
+pickup_lat
+
+pickup_lng
+
+pickup_address
+
+dropoff_lat
+
+dropoff_lng
+
+dropoff_address
+
+estimated_distance_m
+
+estimated_duration_s
+
+proposed_price
+
+selected_price
+
+final_price
+
+payment_method
+
+payment_status
+
+trip_started_at
+
+trip_arrived_at
+
+trip_ended_at
+
+cancelled_by
+
+cancellation_reason
+
+created_at
+
+updated_at
+
+14.8 TripBids
+
+id
+
+trip_id
+
+driver_id
+
+amount
+
+eta_seconds
+
+distance_to_pickup_m
+
+status
+
+created_at
+
+expires_at
+
+14.9 TripEvents
+
+id
+
+trip_id
+
+type
+
+actor_type
+
+actor_id
+
+metadata_json
+
+created_at
+
+14.10 Reviews
+
+id
+
+trip_id
+
+reviewer_user_id
+
+reviewee_user_id
+
+rating
+
+comment
+
+created_at
+
+14.11 Payments
+
+id
+
+trip_id
+
+provider
+
+method
+
+amount
+
+currency
+
+status
+
+external_ref
+
+paid_at
+
+raw_payload_json
+
+14.12 WalletTransactions
+
+id
+
+driver_id
+
+type
+
+amount
+
+balance_before
+
+balance_after
+
+reference
+
+metadata_json
+
+created_at
+
+14.13 Disputes
+
+id
+
+trip_id
+
+opened_by
+
+category
+
+description
+
+status
+
+resolution
+
+resolved_by
+
+resolved_at
+
+15. États de course
+
+Enum recommandé :
+
+draft
+
+searching_driver
+
+bidding_open
+
+driver_selected
+
+driver_en_route
+
+driver_arrived
+
+trip_in_progress
+
+completed
+
+cancelled_by_passenger
+
+cancelled_by_driver
+
+expired
+
+disputed
+
+Transitions :
+
+draft -> searching_driver
+
+searching_driver -> bidding_open
+
+bidding_open -> driver_selected
+
+driver_selected -> driver_en_route
+
+driver_en_route -> driver_arrived
+
+driver_arrived -> trip_in_progress
+
+trip_in_progress -> completed
+
+16. Flow principal complet
+16.1 Flow passager
+
+ouvre app
+
+choisit départ et destination
+
+voit estimation
+
+choisit mode enchère ou prix auto
+
+soumet demande
+
+reçoit offres
+
+sélectionne chauffeur
+
+suit chauffeur en direct
+
+chauffeur arrive
+
+course démarre
+
+course se termine
+
+paiement
+
+note
+
+16.2 Flow chauffeur
+
+passe online
+
+reçoit demande
+
+envoie offre
+
+est sélectionné
+
+va au point de départ
+
+clique “arrivé”
+
+démarre course
+
+termine course
+
+encaisse/paiement confirmé
+
+revenu crédité
+
+17. API REST + temps réel à prévoir
+17.1 Auth
+
+POST /auth/request-otp
+
+POST /auth/verify-otp
+
+GET /auth/me
+
+17.2 Passenger
+
+GET /passenger/profile
+
+PATCH /passenger/profile
+
+GET /passenger/trips
+
+GET /passenger/trips/:id
+
+17.3 Driver
+
+GET /driver/profile
+
+PATCH /driver/profile
+
+POST /driver/go-online
+
+POST /driver/go-offline
+
+POST /driver/location
+
+GET /driver/trips
+
+GET /driver/earnings
+
+17.4 Trips
+
+POST /trips
+
+GET /trips/:id
+
+POST /trips/:id/cancel
+
+POST /trips/:id/select-bid
+
+POST /trips/:id/arrived
+
+POST /trips/:id/start
+
+POST /trips/:id/complete
+
+17.5 Bidding
+
+POST /trips/:id/bids
+
+GET /trips/:id/bids
+
+POST /trips/:id/bids/:bidId/accept
+
+POST /trips/:id/bids/:bidId/reject
+
+17.6 Payments
+
+POST /payments/initiate
+
+POST /payments/webhook
+
+GET /payments/:id
+
+17.7 Reviews
+
+POST /reviews
+
+GET /reviews/me
+
+17.8 Admin
+
+GET /admin/drivers
+
+PATCH /admin/drivers/:id/status
+
+PATCH /admin/documents/:id/review
+
+GET /admin/trips
+
+GET /admin/analytics/overview
+
+17.9 WebSocket events
+
+Passenger channels :
+
+bid.created
+
+bid.updated
+
+trip.driver_location
+
+trip.status_changed
+
+payment.status_changed
+
+Driver channels :
+
+trip.requested
+
+trip.assigned
+
+trip.cancelled
+
+trip.updated
+
+Admin channels :
+
+live.trip.created
+
+live.trip.updated
+
+live.driver.online
+
+live.incident.created
+
+18. Algorithme de matching
+18.1 Sélection chauffeurs éligibles
+
+Critères :
+
+online
+
+bon type de véhicule
+
+documents valides
+
+distance pickup < rayon max
+
+pas déjà en course
+
+score fiabilité suffisant
+
+18.2 Rayon dynamique
+
+Exemple :
+
+centre dense : 2 à 3 km
+
+zone creuse : 5 à 8 km
+
+élargissement progressif si aucune réponse
+
+18.3 Priorisation des chauffeurs notifiés
+
+Trier par :
+
+ETA
+
+fiabilité
+
+proximité
+
+historique d’acceptation
+
+équité de distribution éventuelle
+
+19. Écran UX à développer
+19.1 Passager
+
+Splash / onboarding
+
+Login OTP
+
+Home map
+
+Search destination
+
+Trip request summary
+
+Auction offers list
+
+Driver tracking
+
+In-trip
+
+Payment summary
+
+Rating
+
+History
+
+Wallet/favorites/settings
+
+19.2 Chauffeur
+
+Login OTP
+
+Onboarding docs
+
+Home online/offline
+
+Incoming request modal
+
+Bid submission modal
+
+Assigned trip screen
+
+Navigation to pickup
+
+Waiting for passenger
+
+In-trip screen
+
+Earnings
+
+Profile/documents/settings
+
+19.3 Admin
+
+Login
+
+Dashboard
+
+Drivers
+
+Passengers
+
+Trips
+
+Trip detail
+
+Disputes
+
+Analytics
+
+Config pricing
+
+Config categories/promos
+
+20. Règles non fonctionnelles
+20.1 Performance
+
+réponse API < 300 ms hors appels externes
+
+mise à jour position < 3 secondes perceptibles
+
+support 10 000 connexions socket évolutif
+
+requêtes géospatiales optimisées via PostGIS
+
+20.2 Disponibilité
+
+backend stateless horizontalement scalable
+
+Redis shared
+
+fichiers sur storage externe
+
+logs centralisés
+
+20.3 Sécurité
+
+JWT access + refresh
+
+RBAC admin/chauffeur/passager
+
+rate limiting OTP / login / bids
+
+audit log admin
+
+validation stricte payloads
+
+20.4 Observabilité
+
+logs structurés
+
+métriques
+
+alerting
+
+traces sur flows critiques
+
+suivi erreurs mobiles
+
+21. Stack recommandée finale
+Mobile
+
+Flutter
+
+Riverpod ou Bloc
+
+Dio
+
+go_router
+
+Firebase Messaging
+
+Google Maps / Mapbox SDK
+
+Admin
+
+Next.js
+
+TypeScript
+
+Tailwind
+
+TanStack Query
+
+shadcn/ui
+
+Backend
+
+NestJS
+
+PostgreSQL
+
+PostGIS
+
+Redis
+
+Socket.IO
+
+BullMQ
+
+S3 compatible
+
+Infra
+
+Docker
+
+CI/CD GitHub Actions
+
+déploiement VPS ou cloud
+
+Nginx
+
+monitoring Prometheus/Grafana ou équivalent
+
+Sentry pour erreurs
+
+22. Roadmap MVP → V2
+MVP
+
+OTP
+
+carte
+
+demande de course
+
+enchère
+
+tracking live
+
+cash
+
+mobile money basique
+
+admin validation chauffeur
+
+historique
+
+notation
+
+V1.5
+
+promos
+
+wallet
+
+parrainage
+
+partage de trajet
+
+hotline
+
+heatmaps
+
+V2
+
+abonnement chauffeur
+
+dispatch hybride IA
+
+prix auto + enchère intelligente
+
+corporate rides
+
+livraison
+
+moto
+
+planification de course
+
+multi-ville
+
+23. Prompt “prêt à coller dans Copilot/Cursor” pour lancer le dev
+
+Copie ce bloc tel quel :
+
+Build a production-ready MVP for a ride-hailing platform for Abidjan with 3 apps:
+1) Passenger mobile app
+2) Driver mobile app
+3) Admin web dashboard
+
+Core features:
+- Phone OTP authentication
+- Passenger can set pickup and dropoff on a map
+- Passenger can choose between automatic pricing and auction mode
+- In auction mode, nearby drivers receive the trip request and can submit bids
+- Passenger sees a live list of offers with driver name, rating, ETA, vehicle info, distance, and price
+- Passenger selects one driver offer
+- Real-time live driver tracking on map before pickup and during trip
+- Driver can go online/offline, receive ride requests, place bids, navigate to pickup, mark arrived, start trip, complete trip
+- Support cash and mobile money payments
+- Ratings and reviews
+- Admin can validate drivers, manage users, trips, disputes, pricing rules, commissions, and analytics
+
+Technical constraints:
+- Mobile apps in Flutter
+- Admin dashboard in Next.js + TypeScript
+- Backend in NestJS + TypeScript
+- PostgreSQL with PostGIS
+- Redis for caching/presence/queues
+- Socket.IO for realtime updates
+- S3-compatible storage for documents and images
+
+Data entities:
+- users
+- passenger_profiles
+- driver_profiles
+- vehicles
+- vehicle_categories
+- driver_documents
+- trips
+- trip_bids
+- trip_events
+- payments
+- wallet_transactions
+- reviews
+- disputes
+
+Trip statuses:
+- draft
+- searching_driver
+- bidding_open
+- driver_selected
+- driver_en_route
+- driver_arrived
+- trip_in_progress
+- completed
+- cancelled_by_passenger
+- cancelled_by_driver
+- expired
+- disputed
+
+Required backend modules:
+- auth
+- users
+- passengers
+- drivers
+- vehicles
+- documents
+- trips
+- bidding
+- pricing
+- geolocation
+- realtime
+- payments
+- wallets
+- notifications
+- reviews
+- disputes
+- admin
+- analytics
+- config
+
+Required API endpoints:
+- POST /auth/request-otp
+- POST /auth/verify-otp
+- GET /auth/me
+- GET /passenger/profile
+- PATCH /passenger/profile
+- POST /trips
+- GET /trips/:id
+- POST /trips/:id/cancel
+- POST /trips/:id/select-bid
+- POST /trips/:id/arrived
+- POST /trips/:id/start
+- POST /trips/:id/complete
+- POST /trips/:id/bids
+- GET /trips/:id/bids
+- POST /payments/initiate
+- POST /payments/webhook
+- POST /driver/go-online
+- POST /driver/go-offline
+- POST /driver/location
+- GET /driver/earnings
+- POST /reviews
+
+Required websocket events:
+Passenger:
+- bid.created
+- trip.driver_location
+- trip.status_changed
+- payment.status_changed
+
+Driver:
+- trip.requested
+- trip.assigned
+- trip.cancelled
+- trip.updated
+
+Admin:
+- live.trip.created
+- live.trip.updated
+- live.driver.online
+
+Business logic:
+- Nearby eligible drivers receive ride request
+- Drivers submit bids within a short expiration window
+- Passenger can choose a bid
+- Bid ranking should consider price, ETA, driver rating, driver reliability, distance to pickup
+- Apply minimum and maximum allowed prices dynamically
+- Real-time location updates every few seconds during active trip
+- Handle network instability and retry logic
+- Include audit logging and admin moderation tools
+
+Please generate:
+1. Monorepo structure
+2. Database schema
+3. NestJS modules, DTOs, entities, services, controllers
+4. WebSocket gateway design
+5. Flutter app architecture for passenger and driver apps
+6. Next.js admin architecture
+7. Core trip lifecycle implementation
+8. Auction/bidding engine implementation
+9. Real-time location tracking flow
+10. Docker setup and environment configuration
+11. Seed data and local development setup
+
+The code should be modular, typed, scalable, and ready for MVP deployment.
+24. Prompt encore meilleur pour demander un plan de génération par étapes
+You are the lead architect for this project. Do not generate everything at once.
+
+First, generate the full monorepo architecture and technical design for this ride-hailing platform:
+- Flutter passenger app
+- Flutter driver app
+- Next.js admin
+- NestJS backend
+- PostgreSQL/PostGIS
+- Redis
+- Socket.IO
+
+Then generate the code step by step in this order:
+1. Monorepo structure
+2. Database schema
+3. Auth module with OTP
+4. User roles and profiles
+5. Driver onboarding and documents
+6. Trip creation flow
+7. Nearby driver matching
+8. Bidding engine
+9. Passenger bid selection
+10. Driver live tracking
+11. Trip lifecycle
+12. Payments
+13. Reviews
+14. Admin dashboard
+15. Docker and deployment
+
+For every step:
+- explain architecture choices briefly
+- generate production-quality code
+- include types, validation, DTOs, migrations, and tests where relevant
+- keep naming consistent
+- avoid placeholders unless absolutely necessary
+25. Mon conseil produit le plus important
+
+Pour un vrai lancement, je te recommande de ne pas laisser l’enchère totalement libre.
+Le mieux est une enchère encadrée :
+
+prix recommandé par la plateforme,
+
+marge de négociation limitée,
+
+minimum dynamique,
+
+maximum dynamique.
+
+Sinon tu risques :
+
+guerre des prix,
+
+confusion utilisateur,
+
+attente trop longue,
+
+chauffeurs frustrés,
+
+expérience instable.
+
+Le bon modèle est :
+“prix suggéré + possibilité d’ajustement”, pas “prix totalement libre sans garde-fous”.
