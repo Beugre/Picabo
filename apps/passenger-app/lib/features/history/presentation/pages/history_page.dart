@@ -17,7 +17,7 @@ class HistoryPage extends StatelessWidget {
             destination: 'Destination ${index + 1}',
             date: '${index + 1} déc. 2024',
             price: (1200 + index * 300),
-            status: index == 0 ? 'completed' : 'completed',
+            status: 'completed',
           );
         },
       ),
