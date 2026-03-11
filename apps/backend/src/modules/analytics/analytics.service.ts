@@ -57,7 +57,7 @@ export class AnalyticsService {
     const results = await this.tripRepo
       .createQueryBuilder('t')
       .select("DATE(t.created_at) as date, COUNT(*) as count")
-      .where("t.created_at >= NOW() - INTERVAL ':days days'", { days })
+      .where(`t.created_at >= NOW() - INTERVAL '${days} days'`)
       .groupBy('DATE(t.created_at)')
       .orderBy('date', 'ASC')
       .getRawMany();
@@ -70,7 +70,7 @@ export class AnalyticsService {
       .createQueryBuilder('t')
       .select("DATE(t.trip_ended_at) as date, COALESCE(SUM(t.final_price), 0) as gmv")
       .where("t.status = :status", { status: TripStatus.COMPLETED })
-      .andWhere("t.trip_ended_at >= NOW() - INTERVAL ':days days'", { days })
+      .andWhere(`t.trip_ended_at >= NOW() - INTERVAL '${days} days'`)
       .groupBy('DATE(t.trip_ended_at)')
       .orderBy('date', 'ASC')
       .getRawMany();
